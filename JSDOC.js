@@ -43,4 +43,16 @@
  *              - This function must fetch data from the user's event participation record
  *              - Events should be displayed in chronological order
  *              - @function viewJoinedEvents() -> @type {object} -> @param {userID}
+ * 
+ *  * - Viewing joined events
+ *      - USER STORY: AS A USER, I WANT TO VIEW A LIST OF EVENTS I HAVE JOINED SO THAT I CAN KEEP TRACK OF MY UPCOMING ACTIVITIES.
+ *          - Requirements:
+ *              - Need a method for users to view events they have joined. @function viewJoinedEvents() should display:
+ *                  - Event Names -> @var {eventName}, @type {string}
+ *                  - Event IDs -> @var {eventID}, @type {number}
+ *                  - Dates of the Events -> @var {eventDate}, @type {string}
+ *                  - Roles or Participation Level in the Event -> @var {eventRole}, @type {string}
+ *              - This function must fetch data from the user's event participation record
+ *              - Events should be displayed in chronological order
+ *              - @function viewJoinedEvents() -> @type {object} -> @param {userID}
  */

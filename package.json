@@ -1,0 +1,25 @@
+{
+    "name": "backend",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+      "test": "jest --coverage"
+    },
+    "keywords": [
+      "mongodb",
+      "nodejs",
+      "expressjs"
+    ],
+    "author": "cis3500",
+    "license": "ISC",
+    "dependencies": {
+      "complete": "^0.4.4",
+      "mongodb": "^6.5.0"
+    },
+    "devDependencies": {
+      "eslint": "^8.57.0",
+      "eslint-plugin-react": "^7.34.1"
+    }
+  }
+  

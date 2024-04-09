@@ -43,4 +43,5 @@
  *              - This function must fetch data from the user's event participation record
  *              - Events should be displayed in chronological order
  *              - @function viewJoinedEvents() -> @type {object} -> @param {userID}
+ * 
  */

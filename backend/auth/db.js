@@ -2,13 +2,11 @@
  * This module contains MongoDB connection operations
  */
 
-require('dotenv').config({path: '.env'});
-
-// import the mongodb driver
+// import the driver
 const { MongoClient } = require('mongodb');
 
-// the mongodb server URL
-const dbURL = process.env.DB_URL;
+// DB location
+const dbURL = 'mongodb+srv://cis350coding:cis3500-2024.1@cluster0.if3dm.mongodb.net/SP24_3500_Project?retryWrites=true&w=majority&appName=Cluster0';
 
 // MongoDB database connection
 let MongoConnection;
@@ -51,8 +49,6 @@ const getDB = async () => {
 const closeMongoDBConnection = async () => {
   await MongoConnection.close();
 };
-
-getDB();
 
 // export the functions
 module.exports = {

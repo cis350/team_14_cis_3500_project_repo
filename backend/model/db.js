@@ -1,21 +1,25 @@
+/* eslint-disable no-console */
 /**
- * This module contains MongoDB connection operations
- */
+* This module contains MongoDB connection operations
+*/
 
-// import the driver
+require('dotenv').config();
+
+// import the mongodb driver
 const { MongoClient } = require('mongodb');
 
-// DB location
-const dbURL = 'mongodb+srv://cis350coding:cis3500-2024.1@cluster0.if3dm.mongodb.net/SP24_3500_Project?retryWrites=true&w=majority&appName=Cluster0';
+// the mongodb server URL
+const dbURL = process.env.DB_URL;
 
 // MongoDB database connection
 let MongoConnection;
 
 /**
- * SRP: connects to MongoDB and return the connection handle
- */
+* SRP: connects to MongoDB and return the connection handle
+*/
 
 // connection to the db
+// eslint-disable-next-line consistent-return
 const connect = async () => {
   // always use try/catch to handle any exception
   try {
@@ -31,9 +35,9 @@ const connect = async () => {
 };
 
 /**
- * 
- * @returns the database attached to this MongoDB connection
- */
+*
+* @returns the database attached to this MongoDB connection
+*/
 const getDB = async () => {
   // test if there is an active connection
   if (!MongoConnection) {
@@ -43,12 +47,14 @@ const getDB = async () => {
 };
 
 /**
- *
- * Close the mongodb connection
- */
+*
+* Close the mongodb connection
+*/
 const closeMongoDBConnection = async () => {
   await MongoConnection.close();
 };
+
+getDB();
 
 // export the functions
 module.exports = {

@@ -4,22 +4,21 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "test": "jest --coverage"
+        "test": "jest --coverage"
     },
     "keywords": [
-      "mongodb",
-      "nodejs",
-      "expressjs"
+        "mongodb",
+        "nodejs",
+        "expressjs"
     ],
     "author": "cis3500",
     "license": "ISC",
     "dependencies": {
-      "complete": "^0.4.4",
-      "mongodb": "^6.5.0"
+        "complete": "^0.4.4",
+        "mongodb": "^6.5.0"
     },
     "devDependencies": {
-      "eslint": "^8.57.0",
-      "eslint-plugin-react": "^7.34.1"
+        "eslint": "^8.57.0",
+        "eslint-plugin-react": "^7.34.1"
     }
-  }
-  
+}

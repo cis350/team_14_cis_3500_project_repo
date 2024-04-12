@@ -1,11 +1,12 @@
+/* eslint-disable no-console */
 const { ObjectId } = require('mongodb');
-const { closeMongoDBConnection, getDB } = require('./dbUtils');
+const { getDB } = require('./db');
 
 /**
- *
- * @param {*} newStudent
- * @returns
- */
+* Add a new user to the collection
+* @param {*} newUser - new user to add
+* @returns
+*/
 const addUser = async (newUser) => {
   try {
     // get the db
@@ -16,50 +17,53 @@ const addUser = async (newUser) => {
     // return the result
     return result.insertedId;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not add a user');
   }
 };
 
 /**
-   *
-   * @returns
-   */
+  * get all users in a collection
+  * @returns
+  */
 const getAllUsers = async () => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('Users').find({}).toArray();
+    const result = await db.collection('users').find({}).toArray();
     // print the results
     console.log(`Students: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not get all users');
   }
 };
 
 /**
-   * GET/READ a user given their ID
-   * @param {*} studentID
-   * @returns
-   */
+  * GET/READ a user given their ID
+  * @param {*} userID - user id of a user
+  * @returns
+  */
 const getUser = async (userID) => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('Users').findOne({ _id: new ObjectId(userID) });
+    const result = await db.collection('users').findOne({ _id: ObjectId(userID) });
     // print the result
-    console.log(`Student: ${JSON.stringify(result)}`);
+    console.log(`User: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not get the user');
   }
 };
 
 /**
-   *
-   * @param {*} studentName
-   * @returns
-   */
+  * get a user by username
+  * @param {*} username - the username of a user
+  * @returns
+  */
 const getUserByUName = async (username) => {
   try {
     // get the db
@@ -69,49 +73,53 @@ const getUserByUName = async (username) => {
     console.log(`Student: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not get the user');
   }
 };
 
-// UPDATE a student given their ID
+/**
+* Update a user's username
+* @param {*} userID - the id of a user
+* @param {*} newUname - new username
+* @returns
+*/
 const updateUser = async (userID, newUName) => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('Users').updateOne(
+    const result = await db.collection('users').updateOne(
       { _id: ObjectId(userID) },
       { $set: { username: newUName } },
     );
     return result;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not update the user');
   }
 };
 
-// DELETE a student given their ID
+/**
+* Delete a user with userID
+* @param {*} userID - the userID to delete
+* @returns
+*/
 const deleteUser = async (userID) => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('Users').deleteOne(
+    const result = await db.collection('users').deleteOne(
       { _id: ObjectId(userID) },
     );
-      // print the result
+    // print the result
     console.log(`Student: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
-    console.log(`error: ${err.message}`);
+    console.error(err);
+    throw new Error('could not delete the user');
   }
 };
 
-async function main() {
-  await addUser({username: 'sukya', password: 'tata2'});
-  // await getAllUsers();
-
-  // await getUser('65f8eb1b148959ce4823c0bc');
-  // await closeMongoDBConnection();
-}
-main();
 // export the functions
 module.exports = {
   addUser,

@@ -81,16 +81,16 @@ const getUserByUName = async (username) => {
 /**
 * Update a user's username
 * @param {*} userID - the id of a user
-* @param {*} newUname - new username
+* @param {*} newPassword - new password for a user
 * @returns
 */
-const updateUser = async (userID, newUName) => {
+const updateUser = async (userID, newPassword) => {
   try {
     // get the db
     const db = await getDB();
     const result = await db.collection('users').updateOne(
       { _id: ObjectId(userID) },
-      { $set: { username: newUName } },
+      { $set: { password: newPassword } },
     );
     return result;
   } catch (err) {

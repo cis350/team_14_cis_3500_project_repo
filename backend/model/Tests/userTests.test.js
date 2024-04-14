@@ -1,48 +1,60 @@
-/* eslint-disable import/extensions */
-/* eslint-disable import/no-unresolved */
+/* eslint-disable no-console */
 /* eslint-disable no-undef */
-const dbModule = require('../model/db');
+// test user functions
 
+const { closeMongoDBConnection, getDB } = require('../db');
 // import dbOperations
-const userFunc = require('../model/user');
-
+const userFunc = require('../user');
+// mongo connection
 // declare db object
 let db;
 
 // declare test data
 const user = {
-  username: 'testuser',
-  email: 'testEmail@',
+  username: 'testuser4',
+  email: 'testEmail4@',
+  password: 'testPass!',
 };
 
-test('addUser inserts a new user', async () => {
+beforeAll(async () => {
   // connect to the db
-  db = await dbModule.getDB();
-  // call addPlayer
+  db = await getDB();
+});
+
+/*
+* Close all open connections
+*/
+afterAll(async () => {
+  try {
+    // await mongo.close();
+    closeMongoDBConnection();
+  } catch (err) {
+    console.log('there is an error when closing the database');
+  }
+});
+
+test('addUser inserts a new user', async () => {
+  // call addUser
   await userFunc.addUser(db, user);
-  // find testplayer in the DB
-  const newUser = await db.collection('users').findOne({ user: 'testuser' });
-  // test that newPlayer is testuser
-  expect(newUser.user).toEqual('testuser');
+  // find testUser in the DB
+  console.log('db ', db);
+  const newUser = await db.collection('users').findOne({ username: 'testuser4' });
+  // test that newUser is testuser
+  expect(newUser.username).toEqual('testuser4');
 });
 
 test('addUser throws an exception', async () => {
-  // connect to the db
-  db = await dbModule.getDB();
-
   // incorrect document
   const user1 = 'testuser';
   try {
     await userFunc.addUser(db, user1);
   } catch (err) {
     // test error message
-    expect(err.message).toBe('could not add user');
+    expect(err.message).toBe('could not add a user');
   }
 });
 
 test('getPlayers retrieves all the players a new player', async () => {
-  // connect to the db
-  db = await dbModule.getDB;
   // call addPlayers
   await userFunc.addUser(db, { username: 'user1', email: 'user1@' });
   await userFunc.addUser(db, { username: 'user2', email: 'user2@' });

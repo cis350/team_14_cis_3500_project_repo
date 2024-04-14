@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /**
 * This module contains MongoDB connection operations
 */
@@ -27,10 +26,9 @@ const connect = async () => {
       dbURL,
     )); // we return the entire connection, not just the DB
     // check that we are connected to the db
-    console.log(`connected to db: ${MongoConnection.db().databaseName}`);
     return MongoConnection;
   } catch (err) {
-    console.log(err.message);
+    throw new Error('Cannot connect to the database');
   }
 };
 

@@ -12,11 +12,10 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 // import DB function
-const { getUserByUName } = require('../../model/users');
+const { getUserByUName } = require('../model/user');
 
 // blacklisted tokens
 const jwtBlacklist = new Set();
-//bruh
 
 /**
  * Create a JWT containing the username

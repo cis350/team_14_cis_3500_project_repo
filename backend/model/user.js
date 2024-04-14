@@ -59,6 +59,20 @@ const getUser = async (userID) => {
   }
 };
 
+const getUser2 = async (user, pass) => {
+  try {
+    // get the db
+    const db = await getDB();
+    const result = await db.collection('users').findOne({ username: user, password: pass});
+    // print the result
+    console.log(`User: ${JSON.stringify(result)}`);
+    return result;
+  } catch (err) {
+    console.error(err);
+    throw new Error('could not get the user');
+  }
+};
+
 /**
   * get a user by username
   * @param {*} username - the username of a user
@@ -125,6 +139,7 @@ module.exports = {
   addUser,
   getAllUsers,
   getUser,
+  getUser2,
   getUserByUName,
   updateUser,
   deleteUser,

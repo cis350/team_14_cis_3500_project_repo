@@ -120,10 +120,6 @@ const deleteUser = async (userID) => {
   }
 };
 
-// addUser({ username: 'user1', email: 'user1@', password: 'pass1' });
-
-updateUser('661b41b9919e685bfd91f410', 'passNew123');
-
 // export the functions
 module.exports = {
   addUser,

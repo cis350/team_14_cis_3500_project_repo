@@ -12,7 +12,7 @@ const addUser = async (newUser) => {
     // get the db
     const db = await getDB();
     const result = await db.collection('users').insertOne(newUser);
-    // print the id of the student
+    // print the id of the user
     console.log(`New user created with id: ${result.insertedId}`);
     // return the result
     return result.insertedId;
@@ -32,7 +32,7 @@ const getAllUsers = async () => {
     const db = await getDB();
     const result = await db.collection('users').find({}).toArray();
     // print the results
-    console.log(`Students: ${JSON.stringify(result)}`);
+    console.log(`Users: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
     console.error(err);
@@ -49,7 +49,7 @@ const getUser = async (userID) => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('users').findOne({ _id: ObjectId(userID) });
+    const result = await db.collection('users').findOne({ _id: new ObjectId(userID) });
     // print the result
     console.log(`User: ${JSON.stringify(result)}`);
     return result;
@@ -68,9 +68,9 @@ const getUserByUName = async (username) => {
   try {
     // get the db
     const db = await getDB();
-    const result = await db.collection('Users').findOne({ username });
+    const result = await db.collection('users').findOne({ username });
     // print the result
-    console.log(`Student: ${JSON.stringify(result)}`);
+    console.log(`User: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
     console.error(err);
@@ -89,7 +89,7 @@ const updateUser = async (userID, newPassword) => {
     // get the db
     const db = await getDB();
     const result = await db.collection('users').updateOne(
-      { _id: ObjectId(userID) },
+      { _id: new ObjectId(userID) },
       { $set: { password: newPassword } },
     );
     return result;
@@ -109,16 +109,20 @@ const deleteUser = async (userID) => {
     // get the db
     const db = await getDB();
     const result = await db.collection('users').deleteOne(
-      { _id: ObjectId(userID) },
+      { _id: new ObjectId(userID) },
     );
     // print the result
-    console.log(`Student: ${JSON.stringify(result)}`);
+    console.log(`User: ${JSON.stringify(result)}`);
     return result;
   } catch (err) {
     console.error(err);
     throw new Error('could not delete the user');
   }
 };
+
+// addUser({ username: 'user1', email: 'user1@', password: 'pass1' });
+
+updateUser('661b41b9919e685bfd91f410', 'passNew123');
 
 // export the functions
 module.exports = {

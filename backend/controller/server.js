@@ -84,7 +84,7 @@ webapp.post('/user', async (req, resp) => {
 /**
  * route implementation DELETE /user/:id
  */
-webapp.delete('/user/id', async (req, res) => {
+webapp.delete('/user/:id', async (req, res) => {
   try {
     const result = await dbLib.deleteUser(req.params.id);
     if (result.deletedCount === 0) {
@@ -101,7 +101,7 @@ webapp.delete('/user/id', async (req, res) => {
 /**
    * route implementation PUT /user/:id
    */
-webapp.put('/user/id', async (req, res) => {
+webapp.put('/user/:id', async (req, res) => {
   // parse the body of the request
   if (!req.body.password) {
     res.status(400).json({ message: 'missing password' });

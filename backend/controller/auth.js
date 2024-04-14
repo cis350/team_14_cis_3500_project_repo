@@ -1,6 +1,3 @@
-const { ObjectId } = require('mongodb');
-const { getDB } = require('./db');
-
 /**
  * This module contains authentication and session functions
  *
@@ -25,38 +22,16 @@ const jwtBlacklist = new Set();
  * @param {*} userid
  * @returns the token
  */
-const jwt = require('jsonwebtoken'); // Ensure JWT is installed and imported
-
-const authenticateUser = async (username, password) => {
+const authenticateUser = (username) => {
   try {
-    // Get the database connection
-    const db = await getDB();
-    console.log("username: " + username);
-    console.log("password: " + password);
-
-    // Retrieve the user information using the provided credentials
-    const user = await getUser2(username, password);
-
-    // Check if user retrieval was successful
-    if (user) {
-      // User found, generate a JWT token
-      const token = jwt.sign({ username }, process.env.KEY, { expiresIn: '120s' });
-      console.log('token', token);
-      const result = await db.collection('auth').insertOne({ validate: String(username) + "has been valided"});
-      colsole.log(username +"has been valided");
-      return token; // Return the generated token
-    } else {
-      // No user found with the provided credentials
-      console.log('Authentication failed: No user found.');
-      return null; // Indicate authentication failure
-    }
+    const token = jwt.sign({ username }, process.env.KEY, { expiresIn: '120s' });
+    console.log('token', token);
+    return token;
   } catch (err) {
-    // Log and rethrow the error to be handled by the calling function
-    console.log('Authentication error:', err.message);
+    console.log('error', err.message);
     throw err;
   }
 };
-
 
 /**
  * Verify a token. Check if the user is valid
@@ -94,16 +69,12 @@ const verifyUser = async (token) => {
 
 const blacklistJWT = (token) => jwtBlacklist.add(token);
 
-
-// const main = () =>{
-//     const token = authenticateUser('cis3500');
-//     verifyUser(token);
-// }
-// main();
-
-
-authenticateUser("user1", "user4@pass123");
-
-
+/**
+const main = () =>{
+    const token = authenticateUser('cis3500');
+    verifyUser(token);
+}
+main();
+*/
 
 module.exports = { authenticateUser, verifyUser, blacklistJWT };

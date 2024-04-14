@@ -120,6 +120,8 @@ const deleteUser = async (userID) => {
   }
 };
 
+addUser({username: "test123sp24", email: "test@gmails.com", password: "testpassword123sp24"})
+
 // export the functions
 module.exports = {
   addUser,

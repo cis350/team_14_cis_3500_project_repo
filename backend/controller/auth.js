@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /**
  * This module contains authentication and session functions
  *

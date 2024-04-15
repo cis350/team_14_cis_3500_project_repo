@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+
 function Event(eventName, eventID, eventParty, eventPot, eventBuyIn, eventPassword) {
     this.eventName = eventName; // Name of the event, type string 
     this.eventID = eventID; // ID of the event, type number

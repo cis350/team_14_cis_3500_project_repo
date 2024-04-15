@@ -78,28 +78,6 @@ webapp.post('/logout', async (req, resp) => {
 });
 
 /**
- * route implementations POST /register
- */
-webapp.post('/register', async (req, resp) => {
-  // parse the body
-  if (!req.body.name || !req.body.email || !req.body.password) {
-    resp.status(404).json({ message: 'missing name, email, or password in the body' });
-    return;
-  }
-  try {
-    const registerUser = {
-      username: req.body.name,
-      email: req.body.email,
-      password: req.body.password,
-    };
-    const result = await dbLib.addUser(registerUser);
-    resp.status(201).json({ data: { id: result } });
-  } catch (error) {
-    resp.status(400).json({ message: 'there was an error' });
-  }
-});
-
-/**
  * route implementation GET /users
  */
 webapp.get('/users', async (req, resp) => {

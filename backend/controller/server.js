@@ -23,6 +23,9 @@ webapp.use(express.urlencoded({ extended: true }));
 // import the db function
 const dbLib = require('../model/user');
 
+// Import the event handling functions
+const eventLib = require('../model/event.js');
+
 // root endpoint route
 
 webapp.get('/', (req, resp) => {
@@ -186,6 +189,33 @@ webapp.put('/user/:id', async (req, res) => {
     res.status(200).json({ message: result });
   } catch (err) {
     res.status(400).json({ message: 'there was error' });
+  }
+});
+
+
+/**
+ * POST endpoint to add a new event
+ */
+webapp.post('/event', async (req, res) => {
+  const { eventName, eventQueuePos, eventParty, eventPot, eventBuyIn, eventPassword } = req.body;
+  if (!eventName || !eventQueuePos || !eventParty || !eventPot || !eventBuyIn || !eventPassword) {
+    res.status(400).json({ message: 'Missing required event details' });
+    return;
+  }
+  
+  try {
+    const newEvent = {
+      name: eventName,
+      queuePos: eventQueuePos,
+      party: eventParty,
+      pot: eventPot,
+      buyIn: eventBuyIn,
+      password: eventPassword
+    };
+    const result = await eventLib.addEvent(newEvent);
+    res.status(200).json({ data: { id: result } });
+  } catch (error) {
+    res.status(400).json({ message: 'There was an error processing your request' });
   }
 });
 

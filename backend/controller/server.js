@@ -2,6 +2,8 @@
  * Express webserver / controller
  */
 
+const { ObjectId } = require('mongodb');
+
 // import express
 const express = require('express');
 
@@ -218,6 +220,114 @@ webapp.post('/event', async (req, res) => {
     res.status(400).json({ message: 'There was an error processing your request' });
   }
 });
+
+/**
+ * PUT endpoint to update event pot
+ * route implementation PUT /event/:id
+ */
+webapp.put('/event/:id', async (req, res) => {
+  const { NewEventPot} = req.body;
+  if (!NewEventPot) {
+    res.status(400).json({ message: 'Missing new pot amount' });
+    return;
+  }
+
+  try {
+    const eventID = req.params.id; // Get event ID from URL parameter
+    const eventName = "Retrieve event name if needed or modify function to avoid needing it"; // Placeholder, ideally should fetch or not needed
+    const result = await eventLib.updateEventPot(eventID, NewEventPot);
+
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: 'No event was updated' });
+    } else {
+      res.status(200).json({
+        message: `Event pot updated to ${NewEventPot}`
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'There was an error updating the event' });
+  }
+});
+
+/**
+ * PUT endpoint to update event buy-in
+ * route implementation PUT /event/:id
+ */
+webapp.put('/event/:id', async (req, res) => {
+  const { NewEventBuyIn} = req.body;
+  if (!NewEventBuyIn) {
+    res.status(400).json({ message: 'Missing new buy-in amount' });
+    return;
+  }
+
+  try {
+    const eventID = req.params.id; // Get event ID from URL parameter
+    const eventName = "Retrieve event name if needed or modify function to avoid needing it"; // Placeholder, ideally should fetch or not needed
+    const result = await eventLib.updateEventPot(eventID, NewEventBuyIn);
+
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: 'No event was updated' });
+    } else {
+      res.status(200).json({
+        message: `Event pot updated to ${NewEventBuyIn}`
+      });
+    }
+  } catch (err) {
+    res.status(500).json({ message: 'There was an error updating the event' });
+  }
+});
+
+/**
+ * Route implementation GET /event/:id/party
+ * This route retrieves the party members associated with a specific event.
+ */
+webapp.get('/event/:id/party', async (req, res) => {
+  const eventID = req.params.id;
+  if (!ObjectId.isValid(eventID)) {
+    return res.status(400).json({ message: 'Invalid event ID format' });
+  }
+
+  try {
+    const party = await eventLib.getEventParty(eventID);
+    if (party === null) {
+      res.status(404).json({ message: 'Event not found' });
+      return;
+    }
+    res.status(200).json({ eventParty: party });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'There was an error processing your request' });
+  }
+});
+
+/**
+ * Route implementation GET /event/:id/add-member
+ * This route updates the party members associated with a specific event, specifically adding a new member to a bet.
+ */
+
+webapp.put('/event/:id/add-member', async (req, res) => {
+  const { username } = req.body;
+  const { id: eventID } = req.params;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  try {
+    const success = await eventLib.addMemberToEventParty(eventID, username);
+    if (!success) {
+      res.status(404).json({ message: 'No user found or no event updated' });
+    } else {
+      res.status(200).json({ message: `User ${username} added to event party successfully` });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error processing your request' });
+  }
+});
+
+
+
+
 
 // export the webapp
 module.exports = webapp;

@@ -60,23 +60,28 @@ const getUser = async (userID) => {
 };
 
 /**
-  * get a user by username
+  * Get a user by username and return the user's ID
   * @param {*} username - the username of a user
-  * @returns
+  * @returns the ID of the user if found, otherwise returns null or throws an error
   */
+
 const getUserByUName = async (username) => {
   try {
-    // get the db
     const db = await getDB();
-    const result = await db.collection('users').findOne({ username });
-    // print the result
-    console.log(`User: ${JSON.stringify(result)}`);
-    return result;
+    const result = await db.collection('users').findOne({ username: username });
+    if (result) {
+      console.log(`User found: ID = ${result._id}`);
+      return result._id;  // Return only the user's ID
+    } else {
+      console.log("No user found with that username.");
+      return null;  // Return null if no user is found
+    }
   } catch (err) {
     console.error(err);
-    throw new Error('could not get the user');
+    throw new Error('Could not retrieve the user by username');
   }
 };
+
 
 /**
 * Update a user's username
@@ -84,6 +89,7 @@ const getUserByUName = async (username) => {
 * @param {*} newPassword - new password for a user
 * @returns
 */
+
 const updateUser = async (userID, newPassword) => {
   try {
     // get the db
@@ -120,7 +126,17 @@ const deleteUser = async (userID) => {
   }
 };
 
-addUser({username: "test123sp24", email: "test@gmails.com", password: "testpassword123sp24"})
+
+// addUser({username: "ophera2", email: "ophera@seas.upenn.edu", password: "passAlbert"})
+// addUser({username: "lincolnn", email: "lincolnn@seas.upenn.edu", password: "passLincoln"})
+// addUser({username: "idaisugi", email: "idaisugi@seas.upenn.edu", password: "passIda"})
+// addUser({username: "seanwjc", email: "seanwjc@seas.upenn.edu", password: "passSean"})
+// addUser({username: "mhugues", email: "mhugues@sas.upenn.edu", password: "passHugues"})
+
+
+//getUserByUName("ophera")
+//getUser('661b41b9919e685bfd91f410')
+//updateUser('661b41b9919e685bfd91f410', "securePass")
 
 // export the functions
 module.exports = {

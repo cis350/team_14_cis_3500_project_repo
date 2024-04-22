@@ -12,8 +12,7 @@ const { MongoClient } = require('mongodb');
 */
 
 // the mongodb server URL
-//const dbURL = process.env.DB_URL;
-const dbURL = 'mongodb+srv://ophera:securePassword123@datacluster.dnt08qw.mongodb.net/Team14Database?retryWrites=true&w=majority&appName=DataCluster';
+const dbURL = process.env.DB_URL;
 
 // MongoDB database connection
 let MongoConnection;

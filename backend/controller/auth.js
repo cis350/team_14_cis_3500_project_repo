@@ -69,12 +69,12 @@ const verifyUser = async (token) => {
 
 const blacklistJWT = (token) => jwtBlacklist.add(token);
 
-/**
+
 const main = () =>{
     const token = authenticateUser('cis3500');
     verifyUser(token);
 }
 main();
-*/
+
 
 module.exports = { authenticateUser, verifyUser, blacklistJWT };

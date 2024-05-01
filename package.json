@@ -4,7 +4,7 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-        "start": "node index.js",
+        "start": "cd backend && node index.js",
         "stop": "pkill -f 'node index.js'",
         "test": "jest --coverage"
     },

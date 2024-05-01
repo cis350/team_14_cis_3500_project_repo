@@ -11,6 +11,10 @@ const addUser = async (newUser) => {
   try {
     // get the db
     const db = await getDB();
+
+    if (newUser.username === '') {
+      throw new Error('could not add a user');
+    }
     const result = await db.collection('users').insertOne(newUser);
     // print the id of the user
     console.log(`New user created with id: ${result.insertedId}`);

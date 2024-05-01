@@ -173,14 +173,14 @@ const addMemberToEventParty = async (eventID, username) => {
 //addMemberToEventParty('6625742d6c7fcf66824be438', "seanwjc");
 //addMemberToEventParty('6625742d6c7fcf66824be438', "mhugues");
 
-setTimeout(() => {
-  addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "ophera2");
-  addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "lincolnn");
-  addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "idaisugi");
-  addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "seanwjc");
-  addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "mhugues");
-  getEventParty('6625eb2cc0c7ab0142dbb360');
-}, 200);
+// setTimeout(() => {
+//   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "ophera2");
+//   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "lincolnn");
+//   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "idaisugi");
+//   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "seanwjc");
+//   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "mhugues");
+//   getEventParty('6625eb2cc0c7ab0142dbb360');
+// }, 200);
 
 module.exports = {
   addEvent,

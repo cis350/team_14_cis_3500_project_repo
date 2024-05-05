@@ -3,22 +3,49 @@ import React, { useState } from 'react';
 function CreateBettingRoom() {
     const [gameName, setGameName] = useState('');
     const [gameDescription, setGameDescription] = useState('');
-    const [participants, setParticipants] = useState([
-        { name: "John Doe", img: "https://placekitten.com/g/200/300" }, // Changed dimensions for better compatibility
-        { name: "Jane Smith", img: "https://placekitten.com/g/200/300" } // Changed dimensions for better compatibility
-    ]);
+    const [participants, setParticipants] = useState([]);
     const [gameTimeLimit, setGameTimeLimit] = useState('');
+    const [gamePot, setGamePot] = useState('');
+    const [gameBuyIn, setGameBuyIn] = useState('');
+    const [gamePassword, setGamePassword] = useState('');
 
     const handleAddParticipant = (name) => {
-        const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`; // More reliable dimensions
+        const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`;
         setParticipants(prev => [...prev, { name, img }]);
-    }
+    };
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        console.log('Game Created:', { gameName, gameDescription, participants, gameTimeLimit });
-        // You might want to send this data to your backend server here
-    }
+        const eventData = {
+            eventName: gameName,
+            eventQueuePos: participants.length, // This could represent the total number of participants
+            eventParty: participants,
+            eventPot: gamePot,
+            eventBuyIn: gameBuyIn,
+            eventPassword: gamePassword
+        };
+
+        console.log(eventData);
+
+        try {
+            const response = await fetch('http://localhost:8002/event', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(eventData)
+            });
+            const data = await response.json();
+            if (response.status === 200) {
+                console.log('Game created successfully:', data);
+                // Handle success (e.g., clear form, redirect, or notify user)
+            } else {
+                throw new Error(data.message || 'Failed to create game');
+            }
+        } catch (error) {
+            console.error('Error creating game:', error);
+        }
+    };
 
     return (
         <div>
@@ -50,11 +77,35 @@ function CreateBettingRoom() {
                     </div>
                     <div style={{ marginBottom: '10px' }}>
                         <label>
-                            Game Time Limit (in minutes):
+                            Game Pot:
                             <input
                                 type="number"
-                                value={gameTimeLimit}
-                                onChange={e => setGameTimeLimit(e.target.value)}
+                                value={gamePot}
+                                onChange={e => setGamePot(e.target.value)}
+                                required
+                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
+                            />
+                        </label>
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>
+                            Buy-In:
+                            <input
+                                type="number"
+                                value={gameBuyIn}
+                                onChange={e => setGameBuyIn(e.target.value)}
+                                required
+                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
+                            />
+                        </label>
+                    </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>
+                            Game Password:
+                            <input
+                                type="text"
+                                value={gamePassword}
+                                onChange={e => setGamePassword(e.target.value)}
                                 required
                                 style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
                             />

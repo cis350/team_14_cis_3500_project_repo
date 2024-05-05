@@ -13,6 +13,9 @@ const cors = require('cors');
 // create a new express app
 const webapp = express();
 
+// Import path to allow express to access local files
+const path = require('path');
+
 // import authentication functions
 const { authenticateUser, verifyUser, blacklistJWT } = require('./auth');
 
@@ -28,10 +31,16 @@ const dbLib = require('../model/user');
 // Import the event handling functions
 const eventLib = require('../model/event.js');
 
-// root endpoint route
 
+// Provide the location of the static apps
+// aka React app
+webapp.use(express.static(path.join(__dirname, './frontend/build')));
+
+
+// root endpoint route
 webapp.get('/', (req, resp) => {
-  resp.json({ message: 'CIS 3500 Betting App !!!' });
+  //resp.json({ message: 'CIS 3500 Betting App !!!' });
+  resp.sendFile(path.join(__dirname, './frontend/build/index.html'));
 });
 
 /**
@@ -325,8 +334,10 @@ webapp.put('/event/:id/add-member', async (req, res) => {
   }
 });
 
-
-
+// Add wildcard route
+webapp.get('/', (req, resp) => {
+  resp.sendFile(path.join(__dirname, './frontend/build/index.html'));
+});
 
 
 // export the webapp

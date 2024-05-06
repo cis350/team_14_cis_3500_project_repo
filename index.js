@@ -6,7 +6,7 @@
 // import the express app
 const webapp = require('./backend/controller/server');
 
-const port = 8002;
+const port = 8000;
 
 webapp.listen(port, () => {
   console.log('Server running on port', port);

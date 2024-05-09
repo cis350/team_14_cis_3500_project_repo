@@ -222,26 +222,25 @@ webapp.post('/event', async (req, res) => {
 });
 
 /**
- * PUT endpoint to update event pot
- * route implementation PUT /event/:id
+ * PUT endpoint to update the event pot.
+ * Route implementation PUT /event/:id/pot
  */
-webapp.put('/event/:id', async (req, res) => {
-  const { NewEventPot} = req.body;
-  if (!NewEventPot) {
+ webapp.put('/event/:id/pot', async (req, res) => {
+  const { newPot } = req.body;
+  if (!newPot) {
     res.status(400).json({ message: 'Missing new pot amount' });
     return;
   }
 
   try {
     const eventID = req.params.id; // Get event ID from URL parameter
-    const eventName = "Retrieve event name if needed or modify function to avoid needing it"; // Placeholder, ideally should fetch or not needed
-    const result = await eventLib.updateEventPot(eventID, NewEventPot);
+    const result = await eventLib.updateEventPot(eventID, newPot);
 
     if (result.modifiedCount === 0) {
       res.status(404).json({ message: 'No event was updated' });
     } else {
       res.status(200).json({
-        message: `Event pot updated to ${NewEventPot}`
+        message: `Event pot updated to ${newPot}`
       });
     }
   } catch (err) {
@@ -250,26 +249,25 @@ webapp.put('/event/:id', async (req, res) => {
 });
 
 /**
- * PUT endpoint to update event buy-in
- * route implementation PUT /event/:id
+ * PUT endpoint to update the event buy-in.
+ * Route implementation PUT /event/:id/buy-in
  */
-webapp.put('/event/:id', async (req, res) => {
-  const { NewEventBuyIn} = req.body;
-  if (!NewEventBuyIn) {
+webapp.put('/event/:id/buy-in', async (req, res) => {
+  const { newBuyIn } = req.body;
+  if (!newBuyIn) {
     res.status(400).json({ message: 'Missing new buy-in amount' });
     return;
   }
 
   try {
     const eventID = req.params.id; // Get event ID from URL parameter
-    const eventName = "Retrieve event name if needed or modify function to avoid needing it"; // Placeholder, ideally should fetch or not needed
-    const result = await eventLib.updateEventPot(eventID, NewEventBuyIn);
+    const result = await eventLib.updateEventBuyIn(eventID, newBuyIn);
 
     if (result.modifiedCount === 0) {
       res.status(404).json({ message: 'No event was updated' });
     } else {
       res.status(200).json({
-        message: `Event pot updated to ${NewEventBuyIn}`
+        message: `Event buy-in updated to ${newBuyIn}`
       });
     }
   } catch (err) {
@@ -300,14 +298,39 @@ webapp.get('/event/:id/party', async (req, res) => {
   }
 });
 
+// /**
+//  * Route implementation GET /event/:id/add-member
+//  * This route updates the party members associated with a specific event, specifically adding a new member to a bet.
+//  */
+
+// webapp.put('/event/:id/add-member', async (req, res) => {
+//   const { username } = req.body;
+//   const { id: eventID } = req.params;
+
+//   if (!username) {
+//     return res.status(400).json({ message: 'Username is required' });
+//   }
+
+//   try {
+//     const success = await eventLib.addMemberToEventParty(eventID, username);
+//     if (!success) {
+//       res.status(404).json({ message: 'No user found or no event updated' });
+//     } else {
+//       res.status(200).json({ message: `User ${username} added to event party successfully` });
+//     }
+//   } catch (error) {
+//     res.status(500).json({ message: 'There was an error processing your request' });
+//   }
+// });
+
 /**
- * Route implementation GET /event/:id/add-member
+ * POST endpoint to add a new member to an event party.
+ * Route implementation POST /event/:id/members
  * This route updates the party members associated with a specific event, specifically adding a new member to a bet.
  */
-
-webapp.put('/event/:id/add-member', async (req, res) => {
+ webapp.post('/event/:id/members', async (req, res) => {
   const { username } = req.body;
-  const { id: eventID } = req.params;
+  const eventID = req.params.id;
 
   if (!username) {
     return res.status(400).json({ message: 'Username is required' });
@@ -324,6 +347,7 @@ webapp.put('/event/:id/add-member', async (req, res) => {
     res.status(500).json({ message: 'There was an error processing your request' });
   }
 });
+
 
 
 

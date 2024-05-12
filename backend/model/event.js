@@ -148,30 +148,26 @@ const addMemberToEventParty = async (eventID, username) => {
   }
 };
 
-// const queuePos = async () => {
-//   currentPos = pos + 1;
-// }
 
 
 
-/** 
- * updateEventPot('66244efd47341d13c2561224', 1000);
- * updateEventBuyIn('66244efd47341d13c2561224', 100);
- * getEventParty('66244efd47341d13c2561224');
-*/
+updateEventPot('66244efd47341d13c2561224', 1000);
+updateEventBuyIn('66244efd47341d13c2561224', 100);
+getEventParty('66244efd47341d13c2561224');
 
-// addEvent({eventName: "TEST_EVENT",
-//           eventQueuePos: 1,
-//           eventParty: [],
-//           eventPot: 100,
-//           eventBuyIn: 10,
-//           eventPassword: "secretPassword123"});
 
-//addMemberToEventParty('6625742d6c7fcf66824be438', "ophera2");
-//addMemberToEventParty('6625742d6c7fcf66824be438', "lincolnn");
-//addMemberToEventParty('6625742d6c7fcf66824be438', "idaisugi");
-//addMemberToEventParty('6625742d6c7fcf66824be438', "seanwjc");
-//addMemberToEventParty('6625742d6c7fcf66824be438', "mhugues");
+addEvent({eventName: "TEST_EVENT",
+          eventQueuePos: 1,
+          eventParty: [],
+          eventPot: 100,
+          eventBuyIn: 10,
+          eventPassword: "secretPassword123"});
+
+addMemberToEventParty('6625742d6c7fcf66824be438', "ophera2");
+addMemberToEventParty('6625742d6c7fcf66824be438', "lincolnn");
+addMemberToEventParty('6625742d6c7fcf66824be438', "idaisugi");
+addMemberToEventParty('6625742d6c7fcf66824be438', "seanwjc");
+addMemberToEventParty('6625742d6c7fcf66824be438', "mhugues");
 
 // setTimeout(() => {
 //   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "ophera2");

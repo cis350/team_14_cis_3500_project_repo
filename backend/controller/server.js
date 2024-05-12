@@ -19,6 +19,8 @@ const { authenticateUser, verifyUser, blacklistJWT } = require('./auth');
 // enable cors
 webapp.use(cors());
 
+webapp.use(express.json());
+
 // configure express to parse request bodies
 webapp.use(express.urlencoded({ extended: true }));
 
@@ -27,6 +29,9 @@ const dbLib = require('../model/user');
 
 // Import the event handling functions
 const eventLib = require('../model/event.js');
+
+const queueLib = require('../model/queue.js');
+
 
 // root endpoint route
 
@@ -325,8 +330,37 @@ webapp.put('/event/:id/add-member', async (req, res) => {
   }
 });
 
+/**
+ * Initialize Event Queue
+ * POST /init-queue
+ * This endpoint will initialize an empty event queue.
+ */
+webapp.post('/init-queue', async (req, res) => {
+  try {
+    const result = await queueLib.initializeEventQueue();
+    if (result.message) {
+      res.status(200).json({ message: result.message });
+    } else {
+      res.status(201).json({ message: 'Queue initialized', data: result });
+    }
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error initializing the event queue', error: error.message });
+  }
+});
 
-
+/**
+ * Update Event Queue
+ * POST /update-queue
+ * This endpoint will update the current event queue with the latest events.
+ */
+webapp.post('/update-queue', async (req, res) => {
+  try {
+    const result = await queueLib.updateEventQueue();
+    res.status(200).json({ message: 'Event queue updated', data: result });
+  } catch (error) {
+    res.status(500).json({ message: 'There was an error updating the event queue', error: error.message });
+  }
+});
 
 
 // export the webapp

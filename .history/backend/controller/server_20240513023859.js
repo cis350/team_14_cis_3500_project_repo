@@ -411,20 +411,6 @@ webapp.post('/init-currency', async (req, res) => {
   }
 });
 
-/**
- * GET endpoint to retrieve all events
- */
-webapp.get('/events', async (req, res) => {
-  try {
-      const events = await eventLib.getAllEvents();
-      res.status(200).json({ events });
-  } catch (error) {
-      console.error('Error retrieving all events:', error);
-      res.status(500).json({ message: 'There was an error retrieving the events', error: error.message });
-  }
-});
-
-
 // Process buy-in for an event
 webapp.post('/process-buyin', async (req, res) => {
   const { eventID } = req.body;

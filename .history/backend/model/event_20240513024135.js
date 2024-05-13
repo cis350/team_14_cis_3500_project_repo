@@ -99,21 +99,10 @@ const updateEventBuyIn = async (eventID, NewEventBuyIn) => {
   }
 };
 
-/**
- * Retrieves all events from the events collection.
- * @returns {Promise<Array>} A promise that resolves to an array of event objects.
- */
-const getAllEvents = async () => {
-  try {
-    const db = await getDB();
-    const events = await db.collection('events').find({}).toArray();
-    return events;
-  } catch (err) {
-    console.error('Error retrieving all events:', err);
-    throw new Error('Could not retrieve events');
-  }
-};
-
+async function getAllEvents() {
+  const db = await getDB();
+  return db.collection('events').find({}).toArray();  // Fetches all documents in the 'events' collection
+}
 
 /**
  * Retrieves the buy-in amount for a specified event.
@@ -258,5 +247,4 @@ module.exports = {
   addMemberToEventParty,
   getBuyIn,
   getEventPot,
-  getAllEvents
 };

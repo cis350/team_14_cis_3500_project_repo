@@ -209,7 +209,10 @@ webapp.put('/user/:id', async (req, res) => {
  */
 webapp.post('/event', async (req, res) => {
   const { eventName, eventQueuePos, eventParty, eventPot, eventBuyIn, eventPassword } = req.body;
-  console.log(req.body);
+  if (!eventName || !eventQueuePos || !eventParty || !eventPot || !eventBuyIn || !eventPassword) {
+    res.status(400).json({ message: 'Missing required event details' });
+    return;
+  }
   
   try {
     const newEvent = {
@@ -410,20 +413,6 @@ webapp.post('/init-currency', async (req, res) => {
     res.status(500).json({ message: 'Failed to initialize user currency', error: error.message });
   }
 });
-
-/**
- * GET endpoint to retrieve all events
- */
-webapp.get('/events', async (req, res) => {
-  try {
-      const events = await eventLib.getAllEvents();
-      res.status(200).json({ events });
-  } catch (error) {
-      console.error('Error retrieving all events:', error);
-      res.status(500).json({ message: 'There was an error retrieving the events', error: error.message });
-  }
-});
-
 
 // Process buy-in for an event
 webapp.post('/process-buyin', async (req, res) => {

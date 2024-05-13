@@ -9,38 +9,31 @@ function CreateBettingRoom() {
     const [gameBuyIn, setGameBuyIn] = useState('');
     const [gamePassword, setGamePassword] = useState('');
 
+
     const handleAddParticipant = (name) => {
-        const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`;
+        const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`; // More reliable dimensions
         setParticipants(prev => [...prev, { name, img }]);
-    };
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const eventData = {
-            eventName: gameName,                // Corrected to: name
-            eventQueuePos: participants.length, // Corrected to: queuePos
-            eventParty: participants,           // Corrected to: party
-            eventPot: gamePot,                  // Corrected to: pot
-            eventBuyIn: gameBuyIn,              // Corrected to: buyIn
-            eventPassword: gamePassword         // Corrected to: password
+            eventName: gameName,
+            eventQueuePos: participants.length, // Assuming this might represent the order or count
+            eventParty: participants,
+            eventPot: gamePot,
+            eventBuyIn: gameBuyIn,
+            eventPassword: gamePassword
         };
     
-        console.log(eventData);
-    
+        console.log('Submitting game:', eventData);
         try {
-            const response = await fetch('http://localhost:8001/event', {
+            const response = await fetch('http://localhost:8002/event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    eventName: eventData.eventName,
-                    eventQueuePos: eventData.eventQueuePos,
-                    eventParty: eventData.eventParty,
-                    eventPot: eventData.eventPot,
-                    eventBuyIn: eventData.eventBuyIn,
-                    eventPassword: eventData.eventPassword
-                })
+                body: JSON.stringify(eventData)
             });
             const data = await response.json();
             if (response.status === 200) {
@@ -53,7 +46,6 @@ function CreateBettingRoom() {
             console.error('Error creating game:', error);
         }
     };
-    
 
     return (
         <div>
@@ -85,35 +77,11 @@ function CreateBettingRoom() {
                     </div>
                     <div style={{ marginBottom: '10px' }}>
                         <label>
-                            Game Pot:
+                            Game Time Limit (in minutes):
                             <input
                                 type="number"
-                                value={gamePot}
-                                onChange={e => setGamePot(e.target.value)}
-                                required
-                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
-                            />
-                        </label>
-                    </div>
-                    <div style={{ marginBottom: '10px' }}>
-                        <label>
-                            Buy-In:
-                            <input
-                                type="number"
-                                value={gameBuyIn}
-                                onChange={e => setGameBuyIn(e.target.value)}
-                                required
-                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
-                            />
-                        </label>
-                    </div>
-                    <div style={{ marginBottom: '10px' }}>
-                        <label>
-                            Game Password:
-                            <input
-                                type="text"
-                                value={gamePassword}
-                                onChange={e => setGamePassword(e.target.value)}
+                                value={gameTimeLimit}
+                                onChange={e => setGameTimeLimit(e.target.value)}
                                 required
                                 style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
                             />

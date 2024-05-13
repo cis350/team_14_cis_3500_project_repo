@@ -1,60 +1,48 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
 function CreateBettingRoom() {
     const [gameName, setGameName] = useState('');
     const [gameDescription, setGameDescription] = useState('');
-    const [participants, setParticipants] = useState([]);
+    const [participants, setParticipants] = useState([
+        { name: "John Doe", img: "https://placekitten.com/g/200/300" },
+        { name: "Jane Smith", img: "https://placekitten.com/g/200/300" }
+    ]);
     const [gameTimeLimit, setGameTimeLimit] = useState('');
-    const [gamePot, setGamePot] = useState('');
-    const [gameBuyIn, setGameBuyIn] = useState('');
-    const [gamePassword, setGamePassword] = useState('');
+    const [eventQueuePos, setEventQueuePos] = useState('');
+    const [eventPot, setEventPot] = useState('');
+    const [eventBuyIn, setEventBuyIn] = useState('');
+    const [eventPassword, setEventPassword] = useState('');
+    const [participants, setParticipants] = useState([]);
+    const [error, setError] = useState('');
+    const [eventName, setEventName] = useState('');
 
     const handleAddParticipant = (name) => {
         const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`;
         setParticipants(prev => [...prev, { name, img }]);
-    };
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const eventData = {
-            eventName: gameName,                // Corrected to: name
-            eventQueuePos: participants.length, // Corrected to: queuePos
-            eventParty: participants,           // Corrected to: party
-            eventPot: gamePot,                  // Corrected to: pot
-            eventBuyIn: gameBuyIn,              // Corrected to: buyIn
-            eventPassword: gamePassword         // Corrected to: password
-        };
-    
-        console.log(eventData);
-    
+        setError('');
         try {
-            const response = await fetch('http://localhost:8001/event', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    eventName: eventData.eventName,
-                    eventQueuePos: eventData.eventQueuePos,
-                    eventParty: eventData.eventParty,
-                    eventPot: eventData.eventPot,
-                    eventBuyIn: eventData.eventBuyIn,
-                    eventPassword: eventData.eventPassword
-                })
-            });
-            const data = await response.json();
-            if (response.status === 200) {
-                console.log('Game created successfully:', data);
-                // Handle success (e.g., clear form, redirect, or notify user)
-            } else {
-                throw new Error(data.message || 'Failed to create game');
-            }
+            const eventDetails = {
+                eventName,
+                eventQueuePos: parseInt(eventQueuePos, 10),
+                eventParty: participants,
+                eventPot: parseFloat(eventPot),
+                eventBuyIn: parseFloat(eventBuyIn),
+                eventPassword
+            };
+
+            const response = await axios.post('http://localhost:5000/event', eventDetails);
+            console.log('Game Created:', response.data);
         } catch (error) {
             console.error('Error creating game:', error);
+            setError('Failed to create game. Please try again.');
         }
     };
     
-
     return (
         <div>
             <h1 style={{ color: 'teal' }}>Create a Group Betting Room</h1>
@@ -85,35 +73,11 @@ function CreateBettingRoom() {
                     </div>
                     <div style={{ marginBottom: '10px' }}>
                         <label>
-                            Game Pot:
+                            Game Time Limit (in minutes):
                             <input
                                 type="number"
-                                value={gamePot}
-                                onChange={e => setGamePot(e.target.value)}
-                                required
-                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
-                            />
-                        </label>
-                    </div>
-                    <div style={{ marginBottom: '10px' }}>
-                        <label>
-                            Buy-In:
-                            <input
-                                type="number"
-                                value={gameBuyIn}
-                                onChange={e => setGameBuyIn(e.target.value)}
-                                required
-                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
-                            />
-                        </label>
-                    </div>
-                    <div style={{ marginBottom: '10px' }}>
-                        <label>
-                            Game Password:
-                            <input
-                                type="text"
-                                value={gamePassword}
-                                onChange={e => setGamePassword(e.target.value)}
+                                value={gameTimeLimit}
+                                onChange={e => setGameTimeLimit(e.target.value)}
                                 required
                                 style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
                             />

@@ -17,30 +17,24 @@ function CreateBettingRoom() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const eventData = {
-            eventName: gameName,                // Corrected to: name
-            eventQueuePos: participants.length, // Corrected to: queuePos
-            eventParty: participants,           // Corrected to: party
-            eventPot: gamePot,                  // Corrected to: pot
-            eventBuyIn: gameBuyIn,              // Corrected to: buyIn
-            eventPassword: gamePassword         // Corrected to: password
+            name: gameName,               // Changed from eventName
+            queuePos: participants.length,// Changed from eventQueuePos
+            party: participants,          // Changed from eventParty
+            pot: parseFloat(gamePot),     // Changed from eventPot
+            buyIn: parseFloat(gameBuyIn), // Changed from eventBuyIn
+            password: gamePassword        // Changed from eventPassword
         };
-    
+        
+
         console.log(eventData);
-    
+
         try {
             const response = await fetch('http://localhost:8001/event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    eventName: eventData.eventName,
-                    eventQueuePos: eventData.eventQueuePos,
-                    eventParty: eventData.eventParty,
-                    eventPot: eventData.eventPot,
-                    eventBuyIn: eventData.eventBuyIn,
-                    eventPassword: eventData.eventPassword
-                })
+                body: JSON.stringify(eventData)
             });
             const data = await response.json();
             if (response.status === 200) {
@@ -53,7 +47,6 @@ function CreateBettingRoom() {
             console.error('Error creating game:', error);
         }
     };
-    
 
     return (
         <div>

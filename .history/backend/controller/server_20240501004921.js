@@ -19,6 +19,7 @@ const { authenticateUser, verifyUser, blacklistJWT } = require('./auth');
 // enable cors
 webapp.use(cors());
 
+//enable json
 webapp.use(express.json());
 
 // configure express to parse request bodies
@@ -28,14 +29,7 @@ webapp.use(express.urlencoded({ extended: true }));
 const dbLib = require('../model/user');
 
 // Import the event handling functions
-const eventLib = require('../model/event');
-
-// Import queue.js is located under the model directory
-const queueLib = require('../model/queue.js');
-
-// Import currency.js is located under the model directory
-const currencyLib = require('../model/currency.js');
-
+const eventLib = require('../model/event.js');
 
 // root endpoint route
 
@@ -209,7 +203,10 @@ webapp.put('/user/:id', async (req, res) => {
  */
 webapp.post('/event', async (req, res) => {
   const { eventName, eventQueuePos, eventParty, eventPot, eventBuyIn, eventPassword } = req.body;
-  console.log(req.body);
+  if (!eventName || !eventQueuePos || !eventParty || !eventPot || !eventBuyIn || !eventPassword) {
+    res.status(400).json({ message: 'Missing required event details' });
+    return;
+  }
   
   try {
     const newEvent = {
@@ -284,44 +281,6 @@ webapp.put('/event/:id', async (req, res) => {
 });
 
 /**
- * GET endpoint to retrieve the buy-in amount for a specific event.
- * route implementation GET /event/:id/buy-in
- */
-webapp.get('/event/:id/buy-in', async (req, res) => {
-  const eventID = req.params.id;
-  if (!ObjectId.isValid(eventID)) {
-    return res.status(400).json({ message: 'Invalid event ID format' });
-  }
-
-  try {
-    const buyIn = await eventLib.getBuyIn(new ObjectId(eventID));
-    res.status(200).json({ buyIn: buyIn });
-  } catch (error) {
-    res.status(500).json({ message: 'There was an error retrieving the buy-in amount', error: error.message });
-  }
-});
-
-/**
- * GET endpoint to retrieve the pot amount for a specific event.
- * route implementation GET /event/:id/pot
- */
-webapp.get('/event/:id/pot', async (req, res) => {
-  const eventID = req.params.id;
-  if (!ObjectId.isValid(eventID)) {
-    return res.status(400).json({ message: 'Invalid event ID format' });
-  }
-
-  try {
-    const potAmount = await eventLib.getEventPot(new ObjectId(eventID));
-    res.status(200).json({ potAmount });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'There was an error retrieving the pot amount', error: error.message });
-  }
-});
-
-
-/**
  * Route implementation GET /event/:id/party
  * This route retrieves the party members associated with a specific event.
  */
@@ -369,93 +328,8 @@ webapp.put('/event/:id/add-member', async (req, res) => {
   }
 });
 
-/**
- * Initialize Event Queue
- * POST /init-queue
- * This endpoint will initialize an empty event queue.
- */
-webapp.post('/init-queue', async (req, res) => {
-  try {
-    const result = await queueLib.initializeEventQueue();
-    if (result.message) {
-      res.status(200).json({ message: result.message });
-    } else {
-      res.status(201).json({ message: 'Queue initialized', data: result });
-    }
-  } catch (error) {
-    res.status(500).json({ message: 'There was an error initializing the event queue', error: error.message });
-  }
-});
-
-/**
- * Update Event Queue
- * POST /update-queue
- * This endpoint will update the current event queue with the latest events.
- */
-webapp.post('/update-queue', async (req, res) => {
-  try {
-    const result = await queueLib.updateEventQueue();
-    res.status(200).json({ message: 'Event queue updated', data: result });
-  } catch (error) {
-    res.status(500).json({ message: 'There was an error updating the event queue', error: error.message });
-  }
-});
-
-// Initialize user currency
-webapp.post('/init-currency', async (req, res) => {
-  try {
-    await currencyLib.initializeUserCurrency();
-    res.status(200).json({ message: 'All users have been assigned starter currency.' });
-  } catch (error) {
-    res.status(500).json({ message: 'Failed to initialize user currency', error: error.message });
-  }
-});
-
-/**
- * GET endpoint to retrieve all events
- */
-webapp.get('/events', async (req, res) => {
-  try {
-      const events = await eventLib.getAllEvents();
-      res.status(200).json({ events });
-  } catch (error) {
-      console.error('Error retrieving all events:', error);
-      res.status(500).json({ message: 'There was an error retrieving the events', error: error.message });
-  }
-});
 
 
-// Process buy-in for an event
-webapp.post('/process-buyin', async (req, res) => {
-  const { eventID } = req.body;
-  if (!eventID || !ObjectId.isValid(eventID)) {
-    res.status(400).json({ message: 'Invalid or missing event ID' });
-    return;
-  }
-  
-  try {
-    await currencyLib.processBuyIn(new ObjectId(eventID));
-    res.status(200).json({ message: 'Buy-in processed and event pot updated.' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error processing buy-in', error: error.message });
-  }
-});
-
-// Award the winner of an event
-webapp.post('/award-winner', async (req, res) => {
-  const { eventID } = req.body;
-  if (!eventID || !ObjectId.isValid(eventID)) {
-    res.status(400).json({ message: 'Invalid or missing event ID' });
-    return;
-  }
-  
-  try {
-    await currencyLib.awardWinner(new ObjectId(eventID));
-    res.status(200).json({ message: 'Winner has been awarded the event pot.' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error awarding event winner', error: error.message });
-  }
-});
 
 
 // export the webapp

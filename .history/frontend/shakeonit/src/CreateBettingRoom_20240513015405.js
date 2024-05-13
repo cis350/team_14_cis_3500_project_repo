@@ -13,34 +13,35 @@ function CreateBettingRoom() {
         const img = `https://placekitten.com/g/${Math.floor(200 + Math.random() * 100)}/${Math.floor(300 + Math.random() * 100)}`;
         setParticipants(prev => [...prev, { name, img }]);
     };
+    const newEvent = {
+        name: "eventName",
+        queuePos: 0,
+        party: [],
+        pot: 200,
+        buyIn: 10,
+        password: "bruh"
+    };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
         const eventData = {
-            eventName: gameName,                // Corrected to: name
-            eventQueuePos: participants.length, // Corrected to: queuePos
-            eventParty: participants,           // Corrected to: party
-            eventPot: gamePot,                  // Corrected to: pot
-            eventBuyIn: gameBuyIn,              // Corrected to: buyIn
-            eventPassword: gamePassword         // Corrected to: password
+            name: gameName,
+            queuePos: 0, // This could represent the total number of participants
+            party: [],
+            pot: gamePot,
+            buyIn: gameBuyIn,
+            password: gamePassword
         };
-    
+
         console.log(eventData);
-    
+
         try {
-            const response = await fetch('http://localhost:8001/event', {
+            const response = await fetch('http://localhost:8002/event', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({
-                    eventName: eventData.eventName,
-                    eventQueuePos: eventData.eventQueuePos,
-                    eventParty: eventData.eventParty,
-                    eventPot: eventData.eventPot,
-                    eventBuyIn: eventData.eventBuyIn,
-                    eventPassword: eventData.eventPassword
-                })
+                body: JSON.stringify(eventData)
             });
             const data = await response.json();
             if (response.status === 200) {
@@ -53,7 +54,6 @@ function CreateBettingRoom() {
             console.error('Error creating game:', error);
         }
     };
-    
 
     return (
         <div>

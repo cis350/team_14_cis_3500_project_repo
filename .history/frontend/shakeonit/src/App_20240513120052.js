@@ -7,13 +7,11 @@ import Home from './Home';
 import JoinBettingRoom from './JoinBettingRoom';
 import CreateBettingRoom from './CreateBettingRoom';
 import BettingRoom from './BettingRoom';
-import { UserProvider } from './UserContext';
 
 function App() {
   return (
     <div className="App">
       <Router>
-      <UserProvider>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} exact />
@@ -23,7 +21,6 @@ function App() {
           <Route path="/event/:id" element={<BettingRoom/>} />
           {/* Additional routes can be added here */}
         </Routes>
-        </UserProvider>
       </Router>
     </div>
   );

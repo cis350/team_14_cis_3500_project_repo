@@ -77,53 +77,6 @@ const updateEventPot = async (eventID, NewEventPot) => {
   }
 };
 
-/**
- * Retrieves comprehensive details for a specified event.
- * @param {ObjectId} eventID - The ID of the event.
- * @returns {Promise<Object>} A promise that resolves to an object containing full event details.
- */
-const getEventDetails = async (eventID) => {
-  try {
-    const db = await getDB();
-    const eventDetails = await db.collection('events').aggregate([
-      { $match: { _id: new ObjectId(eventID) } },
-      {
-        $lookup: {
-          from: "users", // Assuming there is a users collection for participant details
-          localField: "eventParty.userID", // Adjust field according to your schema if needed
-          foreignField: "_id",
-          as: "participants"
-        }
-      },
-      {
-        $project: {
-          eventName: 1,
-          eventQueuePos: 1,
-          eventPot: 1,
-          eventBuyIn: 1,
-          eventPassword: 1,
-          participants: {
-            $map: {
-              input: "$participants",
-              as: "participant",
-              in: { username: "$$participant.username", email: "$$participant.email" } // Project only necessary fields
-            }
-          },
-          totalParticipants: { $size: "$eventParty" },
-          totalPot: "$eventPot",
-          totalBuyIn: "$eventBuyIn"
-        }
-      }
-    ]).toArray();
-
-    return eventDetails.length > 0 ? eventDetails[0] : null;
-  } catch (err) {
-    console.error('Error retrieving event details:', err);
-    throw new Error('Could not retrieve event details');
-  }
-};
-
-
 const updateEventBuyIn = async (eventID, NewEventBuyIn) => {
   try {
     // get the db
@@ -185,6 +138,39 @@ const getBuyIn = async (eventID) => {
   }
 };
 
+const getAllEvents = async () => {
+  try {
+    const db = await getDB();
+    const events = await db.collection('events').aggregate([
+      {
+        $lookup: {
+          from: "users", // Assuming you have a users collection
+          localField: "eventParty.userID",
+          foreignField: "_id",
+          as: "participants"
+        }
+      },
+      {
+        $addFields: {
+          totalParticipants: { $size: "$eventParty" },
+          totalPot: "$eventPot", // You can calculate or modify these fields as needed
+          totalBuyIn: "$eventBuyIn"
+        }
+      }
+    ]).toArray();
+
+    return events.map(event => ({
+      ...event,
+      participants: event.participants.map(p => ({
+        username: p.username,
+        email: p.email // or other relevant user details
+      }))
+    }));
+  } catch (err) {
+    console.error('Error retrieving all events:', err);
+    throw new Error('Could not retrieve events');
+  }
+};
 
 
  /**
@@ -307,6 +293,5 @@ module.exports = {
   addMemberToEventParty,
   getBuyIn,
   getEventPot,
-  getAllEvents,
-  getEventDetails
+  getAllEvents
 };

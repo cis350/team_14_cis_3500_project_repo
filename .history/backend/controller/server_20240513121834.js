@@ -14,7 +14,7 @@ const cors = require('cors');
 const webapp = express();
 
 // import authentication functions
-
+const { authenticateUser, verifyUser, blacklistJWT } = require('./auth');
 
 // enable cors
 webapp.use(cors());

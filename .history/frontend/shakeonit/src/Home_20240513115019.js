@@ -26,6 +26,7 @@ function Home() {
 
     return (
         <div className="home-page">
+            <Navbar />  // Assuming you want the navbar displayed
             <h1>Available Betting Rooms</h1>
             {loading ? (
                 <p>Loading events...</p>

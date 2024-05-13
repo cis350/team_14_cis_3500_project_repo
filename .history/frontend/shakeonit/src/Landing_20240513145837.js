@@ -11,35 +11,35 @@ function Landing() {
     const toggleMode = () => setIsLogin(!isLogin);
 
     const handleLogin = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8001/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: email, // Assuming username is the email for login
-                    password: password
-                })
-            });
+    event.preventDefault();
+    try {
+        const response = await fetch('http://localhost:8001/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: email, // Assuming username is the email for login
+                password: password
+            })
+        });
 
-            const data = await response.json();
-            console.log(data)
-            if (data.userId) {
-                console.log('Login successful:', data);
-                setUser({ id: data.userId, email: email });
-                // Save the email and token to localStorage
-                localStorage.setItem('userEmail', email);
-        
-                //window.location.href = '/'; // Change as per your routing setup
-            } else {
-                throw new Error('User ID missing from response');
-            }
-            
-        } catch (error) {
-            console.error('Login error:', error);
+        //const data = await response.json();
+        //console.log(data);
+        if (data.userId) {
+            console.log('Login successful:', data);
+            setUser({ id: data.userId, email: email });
+            // Save the email and token to localStorage
+            localStorage.setItem('userEmail', email);
+    
+            //window.location.href = '/'; // Change as per your routing setup
+        } else {
+            throw new Error('User ID missing from response');
         }
+        
+    } catch (error) {
+        console.error('Login error:', error);
+    }
 };
 
 

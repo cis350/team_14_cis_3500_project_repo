@@ -11,21 +11,21 @@ function Landing() {
     const toggleMode = () => setIsLogin(!isLogin);
 
     const handleLogin = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8001/login', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    username: email, // Assuming username is the email for login
-                    password: password
-                })
-            });
+    event.preventDefault();
+    try {
+        const response = await fetch('http://localhost:8001/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                username: email, // Assuming username is the email for login
+                password: password
+            })
+        });
 
+        if (response.ok) {
             const data = await response.json();
-            console.log(data)
             if (data.userId) {
                 console.log('Login successful:', data);
                 setUser({ id: data.userId, email: email });
@@ -36,10 +36,12 @@ function Landing() {
             } else {
                 throw new Error('User ID missing from response');
             }
-            
-        } catch (error) {
-            console.error('Login error:', error);
+        } else {
+            throw new Error('Login failed');
         }
+    } catch (error) {
+        console.error('Login error:', error);
+    }
 };
 
 

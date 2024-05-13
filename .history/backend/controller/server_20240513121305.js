@@ -14,7 +14,7 @@ const cors = require('cors');
 const webapp = express();
 
 // import authentication functions
-
+const { authenticateUser, verifyUser, blacklistJWT } = require('./auth');
 
 // enable cors
 webapp.use(cors());
@@ -320,22 +320,6 @@ webapp.get('/event/:id/pot', async (req, res) => {
   }
 });
 
-webapp.get('/event/:id/details', async (req, res) => {
-  try {
-    const { id } = req.params;
-    const eventDetails = await eventLib.getEventDetails(id);
-    if (!eventDetails) {
-      res.status(404).json({ message: 'Event not found' });
-    } else {
-      res.status(200).json(eventDetails);
-    }
-  } catch (error) {
-    console.error('Error retrieving event details:', error);
-    res.status(500).json({ message: 'There was an error processing your request', error: error.message });
-  }
-});
-
-
 
 /**
  * Route implementation GET /event/:id/party
@@ -360,6 +344,16 @@ webapp.get('/event/:id/party', async (req, res) => {
   }
 });
 
+
+webapp.get('/events', async (req, res) => {
+  try {
+    const events = await eventLib.getAllEvents();
+    res.status(200).json({ events });
+  } catch (error) {
+    console.error('Error retrieving all events:', error);
+    res.status(500).json({ message: 'There was an error retrieving the events', error: error.message });
+  }
+});
 
 /**
  * Route implementation GET /event/:id/add-member

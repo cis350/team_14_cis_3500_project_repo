@@ -307,6 +307,5 @@ module.exports = {
   addMemberToEventParty,
   getBuyIn,
   getEventPot,
-  getAllEvents,
-  getEventDetails
+  getAllEvents
 };

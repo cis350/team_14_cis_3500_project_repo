@@ -23,25 +23,21 @@ function Landing() {
                     password: password
                 })
             });
-
-            const data = await response.json();
-            console.log(data)
-            if (data.userId) {
-                console.log('Login successful:', data);
-                setUser({ id: data.userId, email: email });
-                // Save the email and token to localStorage
-                localStorage.setItem('userEmail', email);
-        
-                //window.location.href = '/'; // Change as per your routing setup
-            } else {
-                throw new Error('User ID missing from response');
-            }
             
+            const data = await response.json();
+            setUser({ id: data.userId, email: email });
+            console.log('Login successful:');
+            // Save the email and token to localStorage
+            localStorage.setItem('userEmail', email);
+    
+            // Optionally redirect or update UI based on successful login
+            // Redirect to home page or other page
+            window.location.href = '/home'; // Change as per your routing setup
+
         } catch (error) {
             console.error('Login error:', error);
         }
-};
-
+    };
 
     const handleSignUp = async (event) => {
         event.preventDefault();
@@ -96,7 +92,7 @@ function Landing() {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
-                            <button type="submit">Login</button>
+                            <button type="submit" onClick={handleLogin}>Login</button>
                         </form>
                     </div>
                 ) : (

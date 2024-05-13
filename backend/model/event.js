@@ -99,6 +99,59 @@ const updateEventBuyIn = async (eventID, NewEventBuyIn) => {
   }
 };
 
+/**
+ * Retrieves the buy-in amount for a specified event.
+ * @param {ObjectId} eventID - The ID of the event.
+ * @returns {Promise<number>} The buy-in amount of the event.
+ */
+const getBuyIn = async (eventID) => {
+  try {
+    const db = await getDB();
+    const event = await db.collection('events').findOne({ _id: new ObjectId(eventID) }, { projection: { eventBuyIn: 1 } });
+
+    if (!event) {
+      console.error('Event not found');
+      throw new Error('Event not found');
+    }
+
+    console.log("Buy-in amount for event is " + event.eventBuyIn);
+    return event.eventBuyIn;  // Make sure to return the buy-in amount
+  } catch (err) {
+    console.error('Error retrieving buy-in amount:', err);
+    throw new Error('Could not retrieve buy-in amount');
+  }
+};
+
+ /**
+  * Retrieves the pot amount for a specified event.
+  * @param {ObjectId} eventID - The ID of the event as a string
+  * @returns {Promise<number>} The current pot amount of the event.
+  */
+const getEventPot = async (eventID) => {
+  try {
+    const db = await getDB();
+    const event = await db.collection('events').findOne({ _id: new ObjectId(eventID) });
+
+    //console.log("Retrieved event data:", event);  // Log the entire event object
+
+    if (!event) {
+      console.error('Event not found');
+      throw new Error('Event not found');
+    }
+    if (!event.eventPot) {
+      console.error('Event pot not found on the document');
+      throw new Error('Event pot not found on the document');
+    }
+
+    console.log("Pot amount for event is " + event.eventPot);
+    return event.eventPot;
+  } catch (err) {
+    console.error('Error retrieving event pot:', err);
+    throw new Error('Could not retrieve event pot');
+  } 
+};
+
+
 const getEventParty = async (eventID) => {
   try {
     const db = await getDB();
@@ -151,23 +204,26 @@ const addMemberToEventParty = async (eventID, username) => {
 
 
 
-updateEventPot('66244efd47341d13c2561224', 1000);
-updateEventBuyIn('66244efd47341d13c2561224', 100);
-getEventParty('66244efd47341d13c2561224');
+// updateEventPot('66244efd47341d13c2561224', 1000);
+// updateEventBuyIn('66244efd47341d13c2561224', 100);
+// getEventParty('66244efd47341d13c2561224');
 
 
-addEvent({eventName: "TEST_EVENT",
-          eventQueuePos: 1,
-          eventParty: [],
-          eventPot: 100,
-          eventBuyIn: 10,
-          eventPassword: "secretPassword123"});
+// addEvent({eventName: "POKER TOURNAMENT",
+//           eventQueuePos: 1,
+//           eventParty: [],
+//           eventPot: 0,
+//           eventBuyIn: 10,
+//           eventPassword: "secretPassword123"});
 
-addMemberToEventParty('6625742d6c7fcf66824be438', "ophera2");
-addMemberToEventParty('6625742d6c7fcf66824be438', "lincolnn");
-addMemberToEventParty('6625742d6c7fcf66824be438', "idaisugi");
-addMemberToEventParty('6625742d6c7fcf66824be438', "seanwjc");
-addMemberToEventParty('6625742d6c7fcf66824be438', "mhugues");
+addMemberToEventParty('664070d349b7a2e1df44c8e3', "ophera2");
+addMemberToEventParty('664070d349b7a2e1df44c8e3', "lincolnn");
+addMemberToEventParty('664070d349b7a2e1df44c8e3', "idaisugi");
+addMemberToEventParty('664070d349b7a2e1df44c8e3', "seanwjc");
+addMemberToEventParty('664070d349b7a2e1df44c8e3', "mhugues");
+// //getEventParty('6625eb2cc0c7ab0142dbb360');
+// getBuyIn('664070d349b7a2e1df44c8e3');
+getEventPot('664070d349b7a2e1df44c8e3');
 
 // setTimeout(() => {
 //   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "ophera2");
@@ -175,7 +231,7 @@ addMemberToEventParty('6625742d6c7fcf66824be438', "mhugues");
 //   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "idaisugi");
 //   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "seanwjc");
 //   addMemberToEventParty('6625eb2cc0c7ab0142dbb360', "mhugues");
-//   getEventParty('6625eb2cc0c7ab0142dbb360');
+   
 // }, 200);
 
 module.exports = {
@@ -183,5 +239,7 @@ module.exports = {
   updateEventPot,
   updateEventBuyIn,
   getEventParty,
-  addMemberToEventParty
+  addMemberToEventParty,
+  getBuyIn,
+  getEventPot,
 };

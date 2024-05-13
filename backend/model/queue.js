@@ -58,9 +58,9 @@ const updateEventQueue = async () => {
 };
 
 // Perform the initialization and update of the queue
-(async () => {
-  await initializeEventQueue();
-  await updateEventQueue();
-})();
+// (async () => {
+//   await initializeEventQueue();
+//   await updateEventQueue();
+// })();
 
 module.exports = { initializeEventQueue, updateEventQueue };

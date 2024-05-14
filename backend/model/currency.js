@@ -14,7 +14,7 @@ const { ObjectId } = require('mongodb');
 const { getDB } = require('./db');
 
 /**
- * Initializes user currency for all users. This should be called when initializing the system.
+ * Initializes user currency for all users. This should be called when initializing the syst em.
  * @returns {Promise<void>}
  */
 const initializeUserCurrency = async () => {

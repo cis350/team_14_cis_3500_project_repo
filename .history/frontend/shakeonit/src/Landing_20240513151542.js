@@ -12,12 +12,6 @@ function Landing() {
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
-        console.log(JSON.stringify({
-            username: username, // Assuming username is the email for login
-            password: password
-        }));
-
         try {
             const response = await fetch('http://localhost:8001/login', {
                 method: 'POST',
@@ -29,6 +23,7 @@ function Landing() {
                     password: password
                 })
             });
+
 
             const data = await response.json();
             console.log(data)

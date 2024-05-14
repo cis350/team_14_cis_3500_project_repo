@@ -8,7 +8,7 @@
 // import JWT
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'hardcoded';
+const SECRET_KEY = 'hardcoded'
 
 // import the env variables
 require('dotenv').config();

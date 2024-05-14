@@ -8,8 +8,6 @@
 // import JWT
 const jwt = require('jsonwebtoken');
 
-const SECRET_KEY = 'hardcoded';
-
 // import the env variables
 require('dotenv').config();
 
@@ -26,7 +24,7 @@ const jwtBlacklist = new Set();
  */
 const authenticateUser = (username) => {
   try {
-    const token = jwt.sign({ username }, SECRET_KEY, { expiresIn: '120s' });
+    const token = jwt.sign({ username }, process.env.KEY, { expiresIn: '120s' });
     console.log('token', token);
     return token;
   } catch (err) {

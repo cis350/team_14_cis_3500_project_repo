@@ -3,21 +3,15 @@ import { useUser } from './UserContext';
 
 function Landing() {
     const [isLogin, setIsLogin] = useState(true);
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState(''); // Needed for signup
-    const [email, setEmail] = useState(''); 
     const { setUser } = useUser();
 
     const toggleMode = () => setIsLogin(!isLogin);
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
-        console.log(JSON.stringify({
-            username: username, // Assuming username is the email for login
-            password: password
-        }));
-
         try {
             const response = await fetch('http://localhost:8001/login', {
                 method: 'POST',
@@ -25,18 +19,20 @@ function Landing() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    username: username, // Assuming username is the email for login
+                    username: email, // Assuming username is the email for login
                     password: password
                 })
             });
+
+            "error secretOrPrivateKey must have a value"
 
             const data = await response.json();
             console.log(data)
             if (data.userId) {
                 console.log('Login successful:', data);
-                setUser({ id: data.userId, username:username });
+                setUser({ id: data.userId, email: email });
                 // Save the email and token to localStorage
-                localStorage.setItem('userEmail', username);
+                localStorage.setItem('userEmail', email);
         
                 //window.location.href = '/'; // Change as per your routing setup
             } else {
@@ -93,7 +89,7 @@ function Landing() {
                                 placeholder="username"
                                 required
                                 value={username}
-                                onChange={(e) => setUsername(e.target.value)}
+                                onChange={(e) => setEmail(e.target.value)}
                             />
                             <input
                                 type="password"

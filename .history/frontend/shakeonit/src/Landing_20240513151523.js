@@ -5,19 +5,12 @@ function Landing() {
     const [isLogin, setIsLogin] = useState(true);
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState(''); // Needed for signup
-    const [email, setEmail] = useState(''); 
     const { setUser } = useUser();
 
     const toggleMode = () => setIsLogin(!isLogin);
 
     const handleLogin = async (event) => {
         event.preventDefault();
-
-        console.log(JSON.stringify({
-            username: username, // Assuming username is the email for login
-            password: password
-        }));
-
         try {
             const response = await fetch('http://localhost:8001/login', {
                 method: 'POST',
@@ -29,6 +22,7 @@ function Landing() {
                     password: password
                 })
             });
+
 
             const data = await response.json();
             console.log(data)

@@ -8,8 +8,9 @@ function BettingRoom() {
     const [loading, setLoading] = useState(true);
     const [participants, setParticipants] = useState([]);
     const [roomPassword, setRoomPassword] = useState('');
-    const [isParticipant, setIsParticipant] = useState(false);
+    const [isParticipant, setIsParticipant] = useState(false); // State to track if user is a participant
     const { user } = useUser();
+
 
     const buttonStyle = {
         backgroundColor: '#4CAF50',
@@ -26,22 +27,22 @@ function BettingRoom() {
     };
 
     useEffect(() => {
-        async function fetchEventAndParticipants() {
+        async function fetchEvent() {
             try {
                 setLoading(true);
                 const response = await fetch(`http://localhost:8001/event/${id}/details`);
-                const eventData = await response.json();
-                setEvent(eventData);
-                if (eventData && eventData.eventParty && eventData.eventParty.length > 0) {
-                    fetchParticipants();
-                }
+                const data = await response.json();
+                console.log(data);
+                setEvent(data);
+                fetchParticipants(data.eventParty);
             } catch (error) {
                 console.error('Failed to fetch event:', error);
             } finally {
                 setLoading(false);
             }
         }
-        fetchEventAndParticipants();
+        console.log(user);
+        fetchEvent();
     }, [id]);
 
     const handleJoin = async () => {
@@ -51,13 +52,14 @@ function BettingRoom() {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ username: user.username, password: roomPassword })
+                body: JSON.stringify({ eventID: id, username: user.username })
             });
+            console.log(user);
+            console.log(JSON.stringify({ eventID: id, username: user.username }));
             const data = await response.json();
             if (response.ok) {
                 console.log('User added successfully:', data);
-                setIsParticipant(true);
-                fetchParticipants(); // Refresh participants list after joining
+                setIsParticipant(true); // Set participant status to true
             } else {
                 throw new Error(data.message || 'Failed to add user to event');
             }
@@ -88,32 +90,26 @@ function BettingRoom() {
             alert('Error awarding event winner: ' + error.message);
         }
     };
+    
 
     const fetchParticipants = async () => {
         try {
-            const response = await fetch(`http://localhost:8001/event/${id}/party`);
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-            const data = await response.json();
-            if (data.eventParty) {
-                // Use reduce to filter out duplicates based on _id
-                const uniqueParticipants = data.eventParty.reduce((acc, current) => {
-                    const x = acc.find(item => item.userID._id === current.userID._id);
-                    if (!x) {
-                        return acc.concat([current]);
-                    } else {
-                        return acc;
-                    }
-                }, []).map(item => item.userID); // Map to extract the userID objects after deduplication
-    
-                setParticipants(uniqueParticipants);
-            }
+            const response = await fetch(`http://localhost:8001/event/${id}/party`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ eventID: id })
+            });
+
+            const data = response.json();
+            console.log(data);
+            setParticipants(participants);
         } catch (error) {
-            console.error('Error fetching participants:', error);
+            console.error('Error fetching party', error);
+            alert('Error awarding event winner: ' + error.message);
         }
     };
-    
 
     if (loading) return <p>Loading...</p>;
     if (!event) return <p>No event found.</p>;

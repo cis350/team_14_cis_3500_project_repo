@@ -119,6 +119,22 @@ function CreateBettingRoom() {
                             />
                         </label>
                     </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>
+                            Add Participant:
+                            <input
+                                type="text"
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddParticipant(e.target.value);
+                                        e.target.value = ''; // Clear the input after adding
+                                    }
+                                }}
+                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
+                            />
+                        </label>
+                    </div>
                     <button type="submit" style={{ padding: '10px 20px', borderRadius: '8px' }}>Create Game</button>
                 </form>
             </div>

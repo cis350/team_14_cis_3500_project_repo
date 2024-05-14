@@ -119,11 +119,35 @@ function CreateBettingRoom() {
                             />
                         </label>
                     </div>
+                    <div style={{ marginBottom: '10px' }}>
+                        <label>
+                            Add Participant:
+                            <input
+                                type="text"
+                                onKeyDown={e => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault();
+                                        handleAddParticipant(e.target.value);
+                                        e.target.value = ''; // Clear the input after adding
+                                    }
+                                }}
+                                style={{ display: 'block', width: '80%', margin: 'auto', padding: '8px', borderRadius: '8px' }}
+                            />
+                        </label>
+                    </div>
                     <button type="submit" style={{ padding: '10px 20px', borderRadius: '8px' }}>Create Game</button>
                 </form>
             </div>
 
-        
+            <h2>Participants</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
+                {participants.map((participant, index) => (
+                    <div key={index} style={{ padding: '10px', border: '1px solid black', borderRadius: '5px', textAlign: 'center' }}>
+                        <img src={participant.img} alt="Participant" style={{ width: '50px', height: '50px', borderRadius: '50%' }} />
+                        <div>{participant.name}</div>
+                    </div>
+                ))}
+            </div>
         </div>
     );
 }

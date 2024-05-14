@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { useUser } from './UserContext';
+import { useUser} from './UserContext';
 
 function Navbar() {
-    const { user, setUser } = useUser();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userEmail, setUserEmail] = useState('');
+    const { user } = useUser();
 
     const navbarStyle = {
         display: 'flex',
@@ -19,9 +21,17 @@ function Navbar() {
         marginRight: '20px'
     };
 
+    useEffect(() => {
+        const email = user.username; // Assuming the user's email is stored in localStorage upon login
+        if (email) {
+            setUserEmail(email);
+            setIsLoggedIn(true);
+        }
+    }, []);
+
     const handleSignOut = () => {
-        setUser({ id: null, username: null }); // Assuming you clear the user context on sign out
-        localStorage.removeItem('userEmail'); // Assuming you're using localStorage to store the user email
+        setUser({ id: null, username: null });
+        setIsLoggedIn(false);
     };
 
     return (
@@ -31,9 +41,9 @@ function Navbar() {
                 <Link to="/create-room" style={linkStyle}>Create Room</Link>
             </div>
             <div>
-                {user && user.username ? (
+                {isLoggedIn ? (
                     <div>
-                        Welcome, {user.username} <a href="#" onClick={handleSignOut} style={linkStyle}>Sign Out</a>
+                        Welcome, {userEmail} <a href="#" onClick={handleSignOut} style={linkStyle}>Sign Out</a>
                     </div>
                 ) : (
                     <Link to="/signin" style={linkStyle}>Sign In / Sign Up</Link>

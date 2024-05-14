@@ -7,7 +7,7 @@ import Home from './Home';
 import JoinBettingRoom from './JoinBettingRoom';
 import CreateBettingRoom from './CreateBettingRoom';
 import BettingRoom from './BettingRoom';
-import {UserProvider} from './UserContext';
+import UserProvider from './UserContext';
 
 function App() {
   return (

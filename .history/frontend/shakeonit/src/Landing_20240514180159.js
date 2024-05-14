@@ -11,10 +11,7 @@ function Landing() {
 
     const toggleMode = () => setIsLogin(!isLogin);
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event) => {
-        
         event.preventDefault();
 
         console.log(JSON.stringify({

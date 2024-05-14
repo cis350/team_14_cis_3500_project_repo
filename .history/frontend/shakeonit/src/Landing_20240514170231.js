@@ -1,20 +1,16 @@
 import React, { useState } from 'react';
 import { useUser } from './UserContext';
-import { useNavigate } from 'react-router-dom';
 
 function Landing() {
     const [isLogin, setIsLogin] = useState(true);
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState(''); // Needed for signup
     const [email, setEmail] = useState(''); 
-    const { setUser, user } = useUser();
+    const { setUser } = useUser();
 
     const toggleMode = () => setIsLogin(!isLogin);
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event) => {
-        
         event.preventDefault();
 
         console.log(JSON.stringify({
@@ -38,14 +34,11 @@ function Landing() {
             console.log(data)
             if (data.userId) {
                 console.log('Login successful:', data);
-                console.log(data.userId);
-                console.log(data.username);
-                setUser({ id: data.userId, username: data.username });
-                console.log(user);
+                setUser({ id: data.userId, username:username });
                 // Save the email and token to localStorage
                 localStorage.setItem('userEmail', username);
         
-                navigate('/');
+                window.location.href = '/';
             } else {
                 throw new Error('User ID missing from response');
             }

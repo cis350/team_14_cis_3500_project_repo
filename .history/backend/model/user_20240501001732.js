@@ -75,7 +75,7 @@ const getUserByUName = async (username) => {
     const result = await db.collection('users').findOne({ username: username });
     if (result) {
       console.log(`User found: ID = ${result._id}`);
-      return result;  // Return only the user's ID
+      return result._id;  // Return only the user's ID
     } else {
       console.log("No user found with that username.");
       return null;  // Return null if no user is found

@@ -63,7 +63,7 @@ webapp.post('/login', async (req, resp) => {
 
     const result = await dbLib.getUserByUName(req.body.username);
 
-    resp.status(201).json({username:result.username, userId:result._id});
+    resp
 
   } catch (err) {
     resp.status(400).json({ error: 'there was an error' });
@@ -217,12 +217,12 @@ webapp.post('/event', async (req, res) => {
   
   try {
     const newEvent = {
-      eventName: eventName,
-      eventQueuePos: eventQueuePos,
-      eventParty: eventParty,
-      eventPot: eventPot,
-      eventBuyIn: eventBuyIn,
-      eventPassword: eventPassword
+      name: eventName,
+      queuePos: eventQueuePos,
+      party: eventParty,
+      pot: eventPot,
+      buyIn: eventBuyIn,
+      password: eventPassword
     };
     const result = await eventLib.addEvent(newEvent);
     res.status(200).json({ data: { id: result } });

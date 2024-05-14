@@ -47,7 +47,7 @@ webapp.get('/', (req, resp) => {
  * Login endpoint POST /login
  * The name is used to log in
  */
-webapp.post('/login', async (req, resp) => {
+webapp.post('/login', (req, resp) => {
   // check that the name was sent in the body
   if (!req.body.username || req.body.username === '') {
     resp.status(401).json({ error: 'empty or missing username' });
@@ -62,9 +62,7 @@ webapp.post('/login', async (req, resp) => {
     const token = authenticateUser(req.body.username, req.body.password);
 
     const result = await dbLib.getUserByUName(req.body.username);
-
-    resp.status(201).json({username:result.username, userId:result._id});
-
+    
   } catch (err) {
     resp.status(400).json({ error: 'there was an error' });
   }
@@ -217,12 +215,12 @@ webapp.post('/event', async (req, res) => {
   
   try {
     const newEvent = {
-      eventName: eventName,
-      eventQueuePos: eventQueuePos,
-      eventParty: eventParty,
-      eventPot: eventPot,
-      eventBuyIn: eventBuyIn,
-      eventPassword: eventPassword
+      name: eventName,
+      queuePos: eventQueuePos,
+      party: eventParty,
+      pot: eventPot,
+      buyIn: eventBuyIn,
+      password: eventPassword
     };
     const result = await eventLib.addEvent(newEvent);
     res.status(200).json({ data: { id: result } });

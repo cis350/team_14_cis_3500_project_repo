@@ -96,24 +96,11 @@ function BettingRoom() {
                 throw new Error(`HTTP error! Status: ${response.status}`);
             }
             const data = await response.json();
-            if (data.eventParty) {
-                // Use reduce to filter out duplicates based on _id
-                const uniqueParticipants = data.eventParty.reduce((acc, current) => {
-                    const x = acc.find(item => item.userID._id === current.userID._id);
-                    if (!x) {
-                        return acc.concat([current]);
-                    } else {
-                        return acc;
-                    }
-                }, []).map(item => item.userID); // Map to extract the userID objects after deduplication
-    
-                setParticipants(uniqueParticipants);
-            }
+            setParticipants(data.eventParty);
         } catch (error) {
             console.error('Error fetching participants:', error);
         }
     };
-    
 
     if (loading) return <p>Loading...</p>;
     if (!event) return <p>No event found.</p>;

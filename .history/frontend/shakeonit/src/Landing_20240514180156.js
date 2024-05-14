@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useUser } from './UserContext';
-import { useNavigate } from 'react-router-dom';
+import { useUser } from './UserContext';import { useNavigate } from 'react-router-dom';
 
 function Landing() {
     const [isLogin, setIsLogin] = useState(true);
@@ -11,10 +10,7 @@ function Landing() {
 
     const toggleMode = () => setIsLogin(!isLogin);
 
-    const navigate = useNavigate();
-
     const handleLogin = async (event) => {
-        
         event.preventDefault();
 
         console.log(JSON.stringify({

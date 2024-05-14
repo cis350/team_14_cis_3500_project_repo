@@ -221,8 +221,8 @@ webapp.post('/event', async (req, res) => {
       eventQueuePos: eventQueuePos,
       eventParty: eventParty,
       eventPot: eventPot,
-      eventBuyIn: eventBuyIn,
-      eventPassword: eventPassword
+      buyIn: eventBuyIn,
+      password: eventPassword
     };
     const result = await eventLib.addEvent(newEvent);
     res.status(200).json({ data: { id: result } });

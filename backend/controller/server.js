@@ -47,7 +47,7 @@ webapp.get('/', (req, resp) => {
  * Login endpoint POST /login
  * The name is used to log in
  */
-webapp.post('/login', (req, resp) => {
+webapp.post('/login', async (req, resp) => {
   // check that the name was sent in the body
   if (!req.body.username || req.body.username === '') {
     resp.status(401).json({ error: 'empty or missing username' });
@@ -60,7 +60,8 @@ webapp.post('/login', (req, resp) => {
   // authenticate the user
   try {
     const token = authenticateUser(req.body.username, req.body.password);
-    resp.status(201).json({ apptoken: token });
+    const result = await dbLib.getUserByUName(req.body.username);
+    resp.status(201).json({ username: result.username, userId: result._id });
   } catch (err) {
     resp.status(400).json({ error: 'there was an error' });
   }
